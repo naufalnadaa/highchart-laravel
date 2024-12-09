@@ -27,7 +27,7 @@
                         </div>
                         <div class="col-sm-6">
                             <figure class="highcharts-bar">
-                                <div id="bar-chart"></div>
+                                <div id="bar-chart" style="display: none;"></div>
                             </figure>
                         </div>
                     </div>

@@ -3,17 +3,11 @@ document.addEventListener('DOMContentLoaded', function () {
         chart: {
             type: 'column'
         },
-        title: {
-            text: 'Dasawisma Detail'
-        },
-        subtitle: {
-            text: 'Jakarta Timur'
-        },
         xAxis: {
             categories: [],
             crosshair: true,
             accessibility: {
-                description: 'Cities'
+                description: 'Kecamatan'
             }
         },
         yAxis: {
@@ -31,16 +25,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 borderWidth: 0
             }
         },
-        series: [{
-            name: 'Jumlah Data',
-            data: []
-        }]
+        series: [
+            {
+                name: '',
+                data: [],
+            },
+        ]
     });
 
-    // Fetch data and update chart
-    function updateChart() {
-        let url = '/bar-chart';
-
+    function updateChart(kotaId) {
+        let url = `/bar-chart?kota_id=${kotaId}`;
+    
         fetch(url)
             .then(response => {
                 if (response.ok) {
@@ -49,28 +44,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     throw new Error('Error: ' + response.statusText);
                 }
             })
-            .then(result => {
-                const { filtered_data, total_data } = result;
-
-                // Extract categories and data
-                const categories = filtered_data.map(item => item.nama_kota);
-                const data = filtered_data.map(item => parseInt(item.total, 10));
-
-                // Update chart categories and series data
-                chartContainer.xAxis[0].setCategories(categories);
-                chartContainer.series[0].setData(data);
-
-                // Update chart title with total data
-                chartContainer.setTitle(
-                    { text: 'Dasawisma Detail' },
-                    { text: `Total: ${total_data}` }
-                );
-            })
-            .catch(error => {
-                console.error('Error fetching chart data:', error);
-            });
     }
-
-    // Call the function to update chart on load
-    updateChart();
+    // Listen for custom event from pie chart
+    document.addEventListener('pieChartClicked', function (event) {
+        const { kota_id } = event.detail;
+    
+        const chartResult = document.getElementById('chart-result');
+        // chartResult.hidden = false;
+    
+        updateChart(kota_id); // Pass kota_id to updateChart
+    });
 });
