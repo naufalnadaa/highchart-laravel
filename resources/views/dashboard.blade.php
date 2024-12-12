@@ -11,8 +11,11 @@
     <div class="col-12">
         <div class="card">
             <div class="d-flex card-header justify-content-between align-items-center">
-                <div class="col-12">
+                <div class="col-6">
                     <h4 class="header-title">Dashboard Chart</h4>
+                </div>
+                <div class="col-6">
+                    <h4 class="header-title">Chart Result</h4>
                 </div>
             </div>
 
@@ -25,7 +28,7 @@
                                 <div id="pie-chart"></div>
                             </figure>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" id="chart-result" hidden>
                             <figure class="highcharts-bar">
                                 <div id="bar-chart"></div>
                             </figure>

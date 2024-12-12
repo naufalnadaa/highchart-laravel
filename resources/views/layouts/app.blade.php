@@ -56,12 +56,10 @@
     </div> --}}
     <!-- Vendor js -->
     <script src="{{ asset('js/vendor.min.js') }}"></script>
-    <!-- Code Highlight js -->
     <script src="{{ asset('vendor/highlightjs/highlight.pack.min.js') }}"></script>
     <script src="{{ asset('vendor/clipboard/clipboard.min.js') }}"></script>
     <script src="{{ asset('js/hyper-syntax.js') }}"></script>
 
-    <!-- Highchart -->
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
@@ -69,7 +67,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
 
-    <!-- App js -->
     <script src="{{ asset('js/app.min.js') }}"></script>
     <script>
         function formatDate(date){
@@ -92,13 +89,10 @@
             var numString = num.toString();
             var num_parts = numString.split(".");
 
-            // Memisahkan dua digit terakhir dari bagian desimal
             var lastTwoDecimals = num_parts[1] ? num_parts[1].substr(0, 2) : "00";
             
-            // Menggabungkan dua digit pertama desimal ke bagian yang sudah diformat
             var formattedNum = num_parts[0] + "." + lastTwoDecimals;
 
-            // Memformat bagian sebelum titik desimal dengan titik sebagai pemisah ribuan
             formattedNum = formattedNum.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
             return formattedNum;
@@ -107,7 +101,7 @@
             const output = document.getElementById("output");
             output.src = URL.createObjectURL(event.target.files[0]);
             output.onload = function () {
-                URL.revokeObjectURL(output.src); // free memory
+                URL.revokeObjectURL(output.src);
             };
         };
 
@@ -115,9 +109,37 @@
             const output = document.getElementById(idView);
             output.src = URL.createObjectURL(event.target.files[0]);
             output.onload = function () {
-                URL.revokeObjectURL(output.src); // free memory
+                URL.revokeObjectURL(output.src);
             };
         };
+
+        function allowOnlyNumbers(event) {
+            const allowedKeys = [8, 9, 17];
+
+            if (event.keyCode && allowedKeys.includes(event.keyCode)) return true;
+
+            const charCode = event.which ? event.which : event.keyCode;
+
+            if (charCode < 48 || charCode > 57) return false;
+
+            return true;
+        }
+
+        document.querySelectorAll('.numeric-customer-id').forEach(function(input) {
+            input.addEventListener('input', function(event) {
+                let inputValue = event.target.value;
+
+                inputValue = inputValue.replace(/[^\d]/g, '');
+
+                event.target.value = inputValue;
+            });
+
+            input.addEventListener('keypress', function(event) {
+                if (!allowOnlyNumbers(event)) {
+                    event.preventDefault();
+                }
+            });
+        });
     </script>
     @yield('js-page')
 </body>

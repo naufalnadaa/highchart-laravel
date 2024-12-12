@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let chartContainer = Highcharts.chart('pie-chart', {
         chart: {
             type: 'pie',
-            custom: { totalData: 0 }, // Tambahkan custom property untuk menyimpan total
+            custom: { totalData: 0 },
             events: {
                 render() {
                     const chart = this,
@@ -21,10 +21,9 @@ document.addEventListener('DOMContentLoaded', function () {
                                 .add();
                     }
 
-                    // Update total dynamically
                     const totalData = chart.options.chart.custom.totalData || 0;
                     customLabel.attr({
-                        text: `Total<br/><strong>${totalData}</strong>` // Update total
+                        text: `Total<br/><strong>${totalData}</strong>`
                     });
 
                     const x = series.center[0] + chart.plotLeft,
@@ -49,6 +48,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataLabels: {
                     enabled: true,
                     format: '{point.name}: <b>{point.percentage:.0f}%<b>'
+                },
+                point: {
+                    events: {
+                        click: function () {
+                            const clickedKotaId = this.kota_id;
+
+                            // Trigger custom event
+                            document.dispatchEvent(
+                                new CustomEvent('pieChartClicked', {
+                                    detail: { kota_id: clickedKotaId }
+                                })
+                            );
+                        }
+                    }
                 }
             }
         },
@@ -59,9 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
             data: []
         }]
     });
-
-
-    updateChart();
 
     function updateChart() {
         let url = '/pie-chart';
@@ -77,7 +87,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(result => {
                 const { total_data, filtered_data } = result;
 
-                // Update total in chart options
                 if (chartContainer) {
                     chartContainer.options.chart.custom.totalData = total_data;
                 }
@@ -89,13 +98,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     chartContainer.setTitle({ text: titleText }, { text: subtitleText });
                 }
 
-                // Format data for chart (convert total to numbers)
+                // **Konversi data dan tambahkan kota_id**
                 const chartData = filtered_data.map(item => ({
-                    name: item.nama_kota || item.nama_kecamatan || item.nama_kelurahan,
-                    y: parseInt(item.total, 10) // Ensure total is a number
+                    name: item.nama_kota || 'Unknown',
+                    y: parseInt(item.total, 10), // Pastikan total adalah angka
+                    kota_id: item.kota_id // Tambahkan kota_id
                 }));
 
-                // Update chart data
+                // Perbarui data series
                 if (chartContainer && chartContainer.series[0]) {
                     chartContainer.series[0].setData(chartData);
                 }
@@ -103,5 +113,90 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error('Error fetching chart data:', error);
             });
+    }
+
+    let activeBarChartKotaId = null;
+    let barChartInstance = null;
+
+    document.addEventListener('pieChartClicked', function (event) {
+        const { kota_id } = event.detail;
+
+        if (activeBarChartKotaId === kota_id) {
+            // Sembunyikan bar chart jika data yang sama diklik
+            hideBarChart();
+            activeBarChartKotaId = null;
+        } else {
+            // Tampilkan bar chart jika data baru diklik
+            showBarChart(kota_id);
+            activeBarChartKotaId = kota_id;
+        }
+    });
+
+    updateChart();
+
+    // Tampilkan bar chart berdasarkan kota_id yang dipilih
+    function showBarChart(kotaId) {
+        let url = `/bar-chart?kota_id=${kotaId}`;
+        const barChartContainer = document.getElementById('bar-chart');
+        barChartContainer.style.display = 'block';
+
+        if (barChartInstance) {
+            barChartInstance.destroy(); 
+        }
+
+        fetch(url)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Error: ' + response.statusText);
+                }
+            })
+            .then(result => {
+                const { filtered_data, total_data, nama_kota } = result;
+
+                const categories = filtered_data.map(item => item.nama_kecamatan || 'Unknown');
+                const data = filtered_data.map(item => parseInt(item.total, 10));
+
+                barChartInstance = Highcharts.chart('bar-chart', {
+                    chart: {
+                        type: 'column'
+                    },
+                    xAxis: { categories },
+                    yAxis: { title: { text: 'Jumlah' } },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.y}</b>'
+                    },
+                    series: [
+                        {
+                            name: nama_kota,
+                            data
+                        }
+                    ]
+                });
+
+                if (barChartInstance) {
+                    barChartInstance.setTitle(
+                        { text: `${nama_kota} Detail` },
+                        { text: `Total: ${total_data}` }
+                    );
+                }
+
+                console.log('Bar chart ditampilkan untuk kota_id:', kotaId);
+            })
+            .catch(error => {
+                console.error('Error fetching data for bar chart:', error);
+            });
+    }
+
+    function hideBarChart() {
+        const barChartContainer = document.getElementById('bar-chart');
+        barChartContainer.style.display = 'none';
+
+        if (barChartInstance) {
+            barChartInstance.destroy();
+            barChartInstance = null;
+        }
+        console.log('Bar chart disembunyikan.');
     }
 });

@@ -15,5 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HighchartController::class, 'dashboard'])->name('dashboard');
+Route::get('/data-pelanggan', [HighchartController::class, 'dataPelanggan'])->name('data-pelanggan');
+Route::post('/search-data-pelanggan', [HighchartController::class, 'searchDataPelanggan'])->name('search-data-pelanggan');
 Route::get('/pie-chart', [HighchartController::class, 'pieChart'])->name('pieChart');
 Route::get('/bar-chart', [HighchartController::class, 'barChart'])->name('barChart');
