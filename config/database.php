@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'oracle'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -93,36 +93,36 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
-        'oracle' => [
-            'driver'         => 'oracle',
-            'tns'            => env('DB_TNS', ''),
-            'host'           => env('DB_HOST', ''),
-            'port'           => env('DB_PORT', '1521'),
-            'database'       => env('DB_DATABASE', ''),
-            'service_name'   => env('DB_SERVICE_NAME', ''),
-            'sid'            => env('DB_SID', ''),
-            'username'       => env('DB_USERNAME', ''),
-            'password'       => env('DB_PASSWORD', ''),
-            'charset'        => env('DB_CHARSET', 'AL32UTF8'),
-            'prefix'         => '',
-        ],
+        // 'oracle' => [
+        //     'driver'         => 'oracle',
+        //     'tns'            => env('DB_TNS', ''),
+        //     'host'           => env('DB_HOST', ''),
+        //     'port'           => env('DB_PORT', '1521'),
+        //     'database'       => env('DB_DATABASE', ''),
+        //     'service_name'   => env('DB_SERVICE_NAME', ''),
+        //     'sid'            => env('DB_SID', ''),
+        //     'username'       => env('DB_USERNAME', ''),
+        //     'password'       => env('DB_PASSWORD', ''),
+        //     'charset'        => env('DB_CHARSET', 'AL32UTF8'),
+        //     'prefix'         => '',
+        // ],
         
-        'oracle_security' => [
-            'driver'         => 'oracle',
-            'tns'            => '',
-            'host'           => env('DB_HOST', '10.4.2.52'),
-            'port'           => env('DB_PORT', '1521'),
-            'database'       => env('DB_DATABASE', 'intf1'),
-            'service_name'   => env('DB_SERVICE_NAME', ''),
-            'username'       => env('SECURITY_DB_USERNAME', 'security'),
-            'password'       => env('SECURITY_DB_PASSWORD', 'sec12540'),
-            'charset'        => env('DB_CHARSET', 'AL32UTF8'),
-            'prefix'         => '',
-            'sid'            => env('DB_SID', 'intf1'),
-            'edition'        => env('DB_EDITION', 'ora$base'),
-            'server_version' => env('DB_SERVER_VERSION', '11g'),
-            'schema'         => env('SECURITY_DB_SCHEMA', ''),
-        ],
+        // 'oracle_security' => [
+        //     'driver'         => 'oracle',
+        //     'tns'            => '',
+        //     'host'           => env('DB_HOST', '10.4.2.52'),
+        //     'port'           => env('DB_PORT', '1521'),
+        //     'database'       => env('DB_DATABASE', 'intf1'),
+        //     'service_name'   => env('DB_SERVICE_NAME', ''),
+        //     'username'       => env('SECURITY_DB_USERNAME', 'security'),
+        //     'password'       => env('SECURITY_DB_PASSWORD', 'sec12540'),
+        //     'charset'        => env('DB_CHARSET', 'AL32UTF8'),
+        //     'prefix'         => '',
+        //     'sid'            => env('DB_SID', 'intf1'),
+        //     'edition'        => env('DB_EDITION', 'ora$base'),
+        //     'server_version' => env('DB_SERVER_VERSION', '11g'),
+        //     'schema'         => env('SECURITY_DB_SCHEMA', ''),
+        // ],
 
         // 'redis' => [
         //     'client' => env('REDIS_CLIENT', 'phpredis'),

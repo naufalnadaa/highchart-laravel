@@ -45,13 +45,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
     }
-    // Listen for custom event from pie chart
     document.addEventListener('pieChartClicked', function (event) {
         const { kota_id } = event.detail;
     
         const chartResult = document.getElementById('chart-result');
         chartResult.hidden = false;
     
-        updateChart(kota_id); // Pass kota_id to updateChart
+        updateChart(kota_id);
     });
 });

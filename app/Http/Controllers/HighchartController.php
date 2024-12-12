@@ -92,7 +92,7 @@ class HighchartController extends Controller
     public function barChart(Request $request)
     {
         $kotaId = $request->get('kota_id');
-    
+
         $data = DB::table('m_dasawisma')
             ->leftJoin('m_rt', 'm_dasawisma.rt_id', '=', 'm_rt.rt_id')
             ->leftJoin('m_rw', 'm_rt.rw_id', '=', 'm_rw.rw_id')
@@ -105,9 +105,9 @@ class HighchartController extends Controller
             ->groupBy('m_kota.nama_kota', 'm_kecamatan.nama_kecamatan')
             ->orderBy('m_kecamatan.nama_kecamatan', 'asc')
             ->get();
-    
+
         $nama_kota = $data->isNotEmpty() ? $data->first()->nama_kota : 'Unknown';
-    
+
         return response()->json([
             'filtered_data' => $data,
             'total_data' => $data->sum('total'),

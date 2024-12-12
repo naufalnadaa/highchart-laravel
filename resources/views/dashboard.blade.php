@@ -30,7 +30,7 @@
                         </div>
                         <div class="col-sm-6" id="chart-result" hidden>
                             <figure class="highcharts-bar">
-                                <div id="bar-chart"></div>
+                                <div id="bar-chart" style="display: none;"></div>
                             </figure>
                         </div>
                     </div>
